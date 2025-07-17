@@ -37,7 +37,6 @@ Specifically, it allows you to :
 Incoming :
 - Define the most at-risk files
 - Automatically submit the most dangerous files to VirusTotal
-- Automatically create an e-mail request to reset the workstation, if VirusTotal detection exceeds a certain threshold.
 
 # Usage
 
@@ -75,17 +74,11 @@ Run a yara analysis on new and modified files :
 .\main.ps1 scan -In .\BaseScan.csv -Report .\report.csv -YaraScan 
 ```
 
-## Incoming
-
 Compare with hash base & yara + virustotal analysis :
 ```
 .\main.ps1 scan -In .\BaseScan.csv -YaraScan -Vt
 ```
 
-Same + mail 
-```
-.\main.ps1 scan -In .\BaseScan.csv -YaraScan -Vt -Email <mail>
-```
 
 # Configuration File
 
@@ -93,55 +86,16 @@ This file centralizes the configuration settings for the script, facilitating th
 
 ## Configuration Sections
 
-### 1. Default Paths
+### Default Paths
 
 Defines the default directories to scan for file hash verification.
 
 *   `DefaultPaths`: An array of paths to be included in the scan.  This includes user profiles, application data folders, and temporary directories.
 
-### 2. Hash Algorithms
-
-Specifies the hashing algorithms used for file verification.
-
-*   `Default`: The default hashing algorithm to use (e.g., "SHA256").
-*   `Available`: An array of supported hashing algorithms.
-
-### 3. Limits
-
-Defines various limits for the script's operation.
-
-*   `MaxFileSizeMB`:  The maximum file size (in MB) to be processed. Files larger than this limit will be skipped.
-*   `BatchSize`: The number of files processed in each batch.
-
-
-### 4. Logging (currently hs)
-
-Configures the script's logging behavior.
-
-*   `ErrorLogFile`: The name of the file to store error logs.
-*   `DebugLogFile`: The name of the file to store debug logs.
-*   `MaxLogSizeMB`: The maximum size (in MB) of the log files.
-*   `RetentionDays`: The number of days to retain log files.
-
-### 5. Default Exclusions
+### Default Exclusions
 
 Defines a list of file patterns to exclude from the scan.
 
 *   `DefaultExclusions`: An array of file patterns to exclude (e.g., "*.tmp", "*.cache").
 
-
-### 6. Reports
-
-Configures the reporting options for the script.
-
-*   `DefaultTemplate`: The default report template to use.
-*   `Templates`: Defines the available report templates and their settings.
-    *   `Standard`: A standard report template with basic information.
-        *   `IncludeStatistics`:  Whether to include statistical information in the report.
-        *   `IncludeTimestamp`: Whether to include timestamps in the report.
-        *   `GroupByStatus`: Whether to group results by status.
-    *   `Detailed`: A detailed report template with comprehensive information. Includes all `Standard` settings plus:
-        *   `IncludeFileDetails`: Whether to include detailed file information.
-        *   `IncludeSizeInfo`: Whether to include file size information.
-    *   `Minimal`: A minimal report template with limited information.  Disables statistics, timestamps, and grouping.
 
