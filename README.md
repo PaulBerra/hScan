@@ -11,7 +11,7 @@ A small powershell module to track file modifications and additions in specific 
 git clone https://github.com/PaulBerra/hScan.git
 cd hScan
 
-# Script is PowerShell 5 legacy, it dont use Parallel ForEach
+# Script is PowerShell 5 legacy
 ```
 
 We provide a release of Yara, but we recommend that you download the latest version: 
