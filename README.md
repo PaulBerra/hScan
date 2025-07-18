@@ -19,8 +19,13 @@ cp yara/yara_XX.exe .
 rm -rf yara/
 ```
 
-Before starting, you must fill in at least in the config :
+You can use this set of rules to test it : 
+```
+git clone https://github.com/Yara-Rules/rules.git
+```
 
+
+Before starting, you must fill in at least in the config :
 ```
 YaraBinaryPath = "yara64.exe"
 YaraRulesPath = "rules\"
