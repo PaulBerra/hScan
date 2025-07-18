@@ -5,9 +5,8 @@
 # and make it easier to add new features
 
 @{
-
     VirusTotalApiKey = ""
-
+    
     # Report configuration template
     ReportsTemplate = "detailed"
     
