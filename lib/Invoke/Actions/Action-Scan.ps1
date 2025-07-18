@@ -62,6 +62,6 @@ function CompareHashesRecursive {
         }
     }
     
-    Write-Host "Comparison completed : $($Differences.Count) differences found"
+    Write-Host "`rComparison completed : $($Differences.Count) differences found                             "
     return $Differences
 }

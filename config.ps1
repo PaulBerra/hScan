@@ -6,7 +6,7 @@
 
 @{
 
-    VirusTotalApiKey = ""
+    VirusTotalApiKey = "b3885dbd8c298f024557a8399587daa1a4866df4b2b1bfc4e47fbc51f3a32967"
 
     # Report configuration template
     ReportsTemplate = "detailed"
@@ -54,8 +54,8 @@
     YaraConf = @{
         #YaraTemplate = "compact" # compact; standard; detailled
         YaraReport = $true
-        YaraBinaryPath = "yara64.exe"
-        YaraRulesPath = "rules\"
+        YaraBinaryPath = "C:\dev\hScan\bin\yara64.exe"
+        YaraRulesPath = "C:\dev\hScan\rules"
         YaraMatchs = @(
         'Malware','Trojan','Ransomware','Spyware','Adware','Worm',
         'Virus','Backdoor','Keylogger','Botnet','PUA',
@@ -65,6 +65,4 @@
         'APT28','Lazarus','MITRE_T1041','FileLess','Macro','Script'
         )
     }
-
-
 }

@@ -18,7 +18,7 @@ function Save-HashBase {
 
     $extension = [IO.Path]::GetExtension($OutPath).ToLower()
 
-    Write-Host "Saving baseline under $extension in : $OutPath"
+    Write-Host "Saving HashBase under $extension in : $OutPath"
 
     switch ($extension) {
         '.csv' { $Results | Export-Csv -Path $OutPath -NoTypeInformation -Encoding UTF8 }
@@ -39,8 +39,9 @@ function LoadHashBase {
     }
    
     $extension = [IO.Path]::GetExtension($FilePath).ToLower()
-    Write-Host "Loading hashbase : $FilePath (format $extension)"
-   
+    Write-Host "`rLoading hashbase : $FilePath (format $extension)                                       " -NoNewline -ForegroundColor Green
+    Start-Sleep 1.5
+
     try {
         switch ($extension) {
             '.csv' {
@@ -67,7 +68,7 @@ function LoadHashBase {
             }
         }
        
-        Write-Host "HashBase loaded : $($Results.Count) files"
+        Write-Host "`rHashBase loaded : $($Results.Count) file(s)                                       " -NoNewline -ForegroundColor Green
         return $Results
        
     } catch {

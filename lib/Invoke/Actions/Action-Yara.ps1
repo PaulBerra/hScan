@@ -38,13 +38,13 @@ function Invoke-YaraScan {
     try {
         $arguments = @(
             '--no-warnings',
-            #'-s',     show matched strings (debug)
+            '-s',     #show matched strings (debug)
             $indexYar,
             $TargetPath
         )
        
         $yaraOutput = & $YaraBinary $arguments 2>&1
-
+        
         if ($LASTEXITCODE -eq 0) {
             $result.Success = $true
             
@@ -63,7 +63,9 @@ function Invoke-YaraScan {
                 }
             }
         } else {
-            $result.Errors += "Error Yara (code $LASTEXITCODE) : $yaraOutput"
+            Write-Warning "No files found or all files are locked by another program.. cant execute" -
+            Write-Warning "Yara Error (try looking at your index.yar): $yaraOutput"
+            #$result.Errors += "Error Yara (code $LASTEXITCODE) : $yaraOutput"
         }
        
     } catch {

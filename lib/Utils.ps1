@@ -83,24 +83,20 @@ function Show-Help {
     Write-Host "    OPTIONS:" -ForegroundColor Yellow
     Write-Host "    > -Out <file>      Output file (extension auto-detected)" -ForegroundColor White
     Write-Host "    > -In <file>       Input file (required for scan)" -ForegroundColor White
-    Write-Host "    > -Format <type>   Format if no extension: CSV, JSON, XML" -ForegroundColor White
-    Write-Host "    > -Report <file>   Report file for scan results" -ForegroundColor White
     Write-Host "    > -Vt              Enable VirusTotal analysis" -ForegroundColor White
     Write-Host ""
     Write-Host "    EXAMPLES:" -ForegroundColor Yellow
     Write-Host "    * Generate baseline:" -ForegroundColor White
     Write-Host "      .\main.ps1 build -Out baseline.csv" -ForegroundColor Gray
     Write-Host "    * Basic scan:" -ForegroundColor White
-    Write-Host "      .\main.ps1 scan -In baseline.csv -Report changes.csv" -ForegroundColor Gray
+    Write-Host "      .\main.ps1 scan -In baseline.csv -Out changes.csv" -ForegroundColor Gray
     Write-Host "    * Advanced scan with analysis:" -ForegroundColor White
-    Write-Host "      .\main.ps1 scan -In baseline.csv -Report changes.csv -Vt" -ForegroundColor Gray
+    Write-Host "      .\main.ps1 scan -In baseline.csv -Out changes.csv -Vt" -ForegroundColor Gray
     Write-Host ""
     Write-Host "    Author: P. Berra | For: Département de la Gironde" -ForegroundColor Cyan
     Write-Host "    Github: PaulBerra | Build: 2025.07.16" -ForegroundColor Green
     Write-Host ""
 }
-
-
 
 function Show-hScanBanner {
     <#
@@ -255,8 +251,6 @@ function Show-hScanBannerAnimated {
     Show-hScanBanner
 }
 
-
-
 function ConvertTo-DateTime {
     param([string]$DateString)
     
@@ -297,7 +291,6 @@ function ConvertTo-DateTime {
     }
 }
 
-
 function PrintDiff {
     param (
         [Parameter(Mandatory)]
@@ -320,8 +313,6 @@ function PrintDiff {
     }
 }
 
-
-
 function BuildReport {
     param(
         [Parameter(Mandatory)]
@@ -333,7 +324,6 @@ function BuildReport {
         [ValidateSet('standard', 'detailed', 'minimal')]
         [string]$ReportType = 'standard'
     )
-
 
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     $templatesPath = Resolve-Path ("$PSScriptRoot\..\lib\Invoke\templates\report_csv_summary.ps1")   
@@ -408,8 +398,8 @@ function BuildReport {
                     "Simple report - $($report.Metadata.GeneratedAt)" | Out-File -FilePath $summaryPath -Encoding UTF8
                 }
             
-                Write-Host "CSV Report: $OutputPath" -ForegroundColor Green
-                Write-Host "Summary: $summaryPath" -ForegroundColor Green
+                Write-Debug "CSV Report: $OutputPath" 
+                Write-Debug "Summary: $summaryPath" 
             }
             '.xml' {
                 $report | Export-Clixml -Path $OutputPath
@@ -421,8 +411,6 @@ function BuildReport {
             }
         }
        
-        Write-Host "Report [$ReportType] saved: $OutputPath" -ForegroundColor Green
-       
     } catch {
         Write-Error "Erreur building report: $($_.Exception.Message)"
         # Fallback - rapport simple
@@ -431,3 +419,5 @@ function BuildReport {
    
     return $report
 }
+
+

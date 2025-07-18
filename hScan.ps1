@@ -47,9 +47,16 @@ switch ($Action.ToLower()) {
     }
     'scan' {
         Show-hScanBannerAnimated
-        Write-Host "→ SCAN : Reading of '$In'"
-        if ($YaraScan -eq $true -and $Vt -eq $false) { Write-Host " [+] YaraScan turned on" } # if yara, print yara turned on
-        if ($Vt -eq $true)       { Write-Host " [+] VirusTotal submission turned on(YaraScan auto-enabled)" } # if virustotal, print virustotal
+        Write-Host "=> SCAN : Reading of '$In'"
+
+        if ($YaraScan -eq $true -and $Vt -eq $false) { 
+            Write-Host "`r[+] YaraScan turned on                                      " -NoNewline -ForegroundColor Green # if yara, print yara turned on 
+            Start-Sleep 2
+        } 
+        if ($Vt -eq $true) { 
+            Write-Host "`r[+] VirusTotal submission turned on (YaraScan auto-enabled)" -NoNewline -ForegroundColor Green # if virustotal, print virustotal
+            Start-Sleep 2
+        } 
         Invoke-Scan -In $In -Out $Out -Config $ConfigObject -YaraScan $YaraScan -Vt $Vt -Report $ConfigObject.ReportsTemplate
         break
     }

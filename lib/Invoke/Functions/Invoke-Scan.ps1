@@ -27,19 +27,16 @@ function Invoke-Scan {
         [string]$Report
     )
 
-    Write-Host "Path monitored : $($Config.DefaultPaths -join ', ')"
+    Write-Debug "Path monitored : $($Config.DefaultPaths -join ', ')"
 
     $OldHashes = LoadHashBase -FilePath $In
-    $NewsHashes = GetFileHashesRecursive -Config $Config
 
+    $NewsHashes = GetFileHashesRecursive -Config $Config
     $Differences = CompareHashesRecursive -OldHashes $OldHashes -NewHashes $NewsHashes
 
-    ### temp : print results (wait export func)
-    Write-Host "`nDifferences founds :" -ForegroundColor Cyan
+    Write-Debug "`nDifferences founds :" 
     
     PrintDiff -Differences $Differences 
-    ###
-
 
     if (-not $Differences -or $Differences.Count -eq 0) {
         Write-Warning "No files found."
@@ -48,7 +45,7 @@ function Invoke-Scan {
 
     Save-HashBase -Results $Differences -OutPath $Out
 
-    Write-Host "Successfully build Report of $($Differences.Count) files."
+    Write-Debug "Successfully build Report of $($Differences.Count) files."
 
     ##########################################
     ##              YaraScan                ##
@@ -56,7 +53,7 @@ function Invoke-Scan {
 
     if ($YaraScan -eq $true) {  # if -YaraScan flag
         $suspiciousFiles = $Differences | Where-Object { $_.Status -in @('new', 'modified') }
-        Write-Host "Launching yara investigations on $($suspiciousFiles.Count) files" 
+        Write-Debug "Launching yara investigations on $($suspiciousFiles.Count) files" 
         
         $yaraResults = @()
         foreach ($file in $suspiciousFiles) {
@@ -68,45 +65,46 @@ function Invoke-Scan {
            
             # if you see error in yarascan or the same hash continuously sent to virustotal, uncomment this and read the output to debug
         #    if ($scanResult.HasDetections) {
-        #        Write-Host "DETECTION: $([System.IO.Path]::GetFileName($scanResult.TargetPath))" -ForegroundColor Red
-        #        $scanResult.RuleMatches | ForEach-Object { Write-Host "  Rule: $($_.Rule)" -ForegroundColor Yellow }
+        #        Write-Debug "DETECTION: $([System.IO.Path]::GetFileName($scanResult.TargetPath))"  
+        #        $scanResult.RuleMatches | ForEach-Object { Write-Debug "  Rule: $($_.Rule)"}
         #    } elseif ($scanResult.Errors.Count -gt 0) {
-        #        Write-Host " Error on $([System.IO.Path]::GetFileName($scanResult.TargetPath)): $($scanResult.Errors[0])" -ForegroundColor Gray
+        #        Write-Debug " Error on $([System.IO.Path]::GetFileName($scanResult.TargetPath)): $($scanResult.Errors[0])"  
         #    }
         #}
 
         # Build Report   
-        $report = BuildReport -Differences $Differences -YaraResults $yaraResults -Config $Config -OutputPath $Out
+        $report = BuildReport -Differences $Differences -YaraResults $yaraResults -Config $Config -OutputPath $Out -ReportType $Config.ReportsTemplate
         
         # print report in console
-        #Write-Host "New: $($report.Summary.NewFiles) | Modifies: $($report.Summary.ModifiedFiles) | Supprimes: $($report.Summary.DeletedFiles)" -ForegroundColor White
-        #Write-Host "Yara - Detections: $($report.Summary.YaraDetections) | Errors: $($report.Summary.YaraErrors)" -ForegroundColor White
+        #Write-Debug "New: $($report.Summary.NewFiles) | Modifies: $($report.Summary.ModifiedFiles) | Supprimes: $($report.Summary.DeletedFiles)"  
+        #Write-Debug "Yara - Detections: $($report.Summary.YaraDetections) | Errors: $($report.Summary.YaraErrors)"  
 
         # Resume in console
         #$detectionsCount = ($yaraResults | Where-Object { $_.HasDetections }).Count
-        #$errorsCount = ($yaraResults | Where-Object { $_.Errors.Count -gt 0 }).Count
-        #Write-Host "`nResume Yara: $detectionsCount detections, $errorsCount erreurs" -ForegroundColor Cyan
+        #$errorsCount = ($yaraResults | Where-Object { $_.Errors.Count -gt 0 })#.Count
+        #Write-Debug "`nResume Yara: $detectionsCount detections, $errorsCount erreurs"  
 
         if ($Vt -eq $true -and $Config.VirusTotalApiKey) { # if we have -Vt flag and key provided
             $suspiciousHashes = $Differences | Where-Object { $_.Status -in @('new', 'modified') -and $_.Hash } | Select-Object -ExpandProperty Hash
-
-            Write-Host "`nLaunching VirusTotal scan on $($suspiciousHashes.Count) files..." -ForegroundColor Cyan
-
+            
+            if ($null -ne $suspiciousHashes) {
+                Write-Debug "`nLaunching VirusTotal scan on $($suspiciousHashes.Count) file(s)..."
+            }
             try { # if file is locked or in anormal state
                 $vtResults = Invoke-VirusTotalScan -Hash $suspiciousHashes -ApiKey $Config.VirusTotalApiKey
-                #write-Host "" .$vtResults # debug
+                #Write-Debug "" .$vtResults # debug
             }
             catch {
-                write-host "No files to analyze or all files are locked by another program. Skipping VirusTotal scan & report.."
+                Write-Debug "No files to analyze or all files are locked by another program. Skipping VirusTotal scan & report.."
                 exit 0
             }
 
-            Write-Host "Building virustotal report...."
+            Write-Debug "Building virustotal report...."
 
-            $report = BuildReport -Differences $Differences -YaraResults $yaraResults -Config $Config -VtResults $vtResults -OutputPath $Out -ReportType 'detailed'
+            $report = BuildReport -Differences $Differences -YaraResults $yaraResults -Config $Config -VtResults $vtResults -OutputPath $Out -ReportType $Config.ReportsTemplate
 
         } elseif ($Vt -eq $true -and $Config.VirusTotalApiKey::IsNullOrEmpty) { #if no key
-            Write-host "VirusTotal API KEY Needed If -Vt used"
+            Write-Debug "VirusTotal API KEY Needed If -Vt used"
         }
 
         #### alternativ usage of Invoke-VirusTotalScan ###

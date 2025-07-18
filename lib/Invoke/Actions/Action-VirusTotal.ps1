@@ -60,7 +60,7 @@ function Invoke-VirusTotalScan {
             }
             
             # Lookup of report
-            Write-Host "VT Lookup: $queryHash" -ForegroundColor Gray
+            Write-Host "VIrusTotal Lookup: $queryHash" -ForegroundColor Gray
             $uri = "$baseUrl/file/report"
             $body = @{
                 apikey = $ApiKey
@@ -109,8 +109,8 @@ function Invoke-VirusTotalScan {
             }
             
         } catch {
-            $result.Errors += "Erreur API VT : $($_.Exception.Message)"
-            Write-Host "VT Error: $($_.Exception.Message)" -ForegroundColor Red
+            $result.Errors += "Erreur API VirusTotal : $($_.Exception.Message)"
+            Write-Host "VirusTotal Error: $($_.Exception.Message)" -ForegroundColor Red
         }
         
         $results += $result
