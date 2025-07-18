@@ -54,8 +54,8 @@
     YaraConf = @{
         #YaraTemplate = "compact" # compact; standard; detailled
         YaraReport = $true
-        YaraBinaryPath = "C:\Users\p.berra\Desktop\DevPaul\hScan\bin\yara64.exe"
-        YaraRulesPath = "C:\Users\p.berra\Desktop\DevPaul\hScan\rules"
+        YaraBinaryPath = "yara64.exe"
+        YaraRulesPath = "rules\"
         YaraMatchs = @(
         'Malware','Trojan','Ransomware','Spyware','Adware','Worm',
         'Virus','Backdoor','Keylogger','Botnet','PUA',
