@@ -19,7 +19,7 @@ cp yara/yara_XX.exe .
 rm -rf yara/
 ```
 
-We also provide a set of yara rules found on github, which you are free to improve or contribute to.
+We also recommend choosing a repo of relevant yara rules and indexed patches (index.yar).
 
 # Concept
 In most organizations, PC fleets are generally deployed with images customized to the company.
