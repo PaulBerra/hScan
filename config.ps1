@@ -6,7 +6,7 @@
 
 @{
 
-    VirusTotalApiKey = "b3885dbd8c298f024557a8399587daa1a4866df4b2b1bfc4e47fbc51f3a32967"
+    VirusTotalApiKey = ""
 
     # Report configuration template
     ReportsTemplate = "detailed"
