@@ -25,7 +25,7 @@ param(
     [switch]$optimize = $false # default dont try to calcul entropy
 )
 
- # if -vt, we gonna need the report of yara & the optimisation, so yara = $true & optimize = $true
+ # if -vt, we gonna need the report of yara, so yara = $true
 if ($Vt) { $YaraScan = $true}
 
 # modules dot sourcing (not definitiv)
