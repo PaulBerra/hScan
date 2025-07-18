@@ -104,7 +104,7 @@ function Invoke-Scan {
             $report = BuildReport -Differences $Differences -YaraResults $yaraResults -Config $Config -VtResults $vtResults -OutputPath $Out -ReportType $Config.ReportsTemplate
 
         } elseif ($Vt -eq $true -and $Config.VirusTotalApiKey::IsNullOrEmpty) { #if no key
-            Write-Debug "VirusTotal API KEY Needed If -Vt used"
+            Write-Error "VirusTotal API KEY Needed If -Vt used"
         }
 
         #### alternativ usage of Invoke-VirusTotalScan ###
