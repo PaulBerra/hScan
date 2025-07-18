@@ -109,11 +109,11 @@ Define the template of the report.
 Defines the rules used in YaraScan (like the -t parameter of the binary)
 
 ```
-*   `YaraMatchs` = @(
+*   YaraMatchs = @(
         'Malware','Trojan','Ransomware','Spyware','Adware','Worm',
         'Virus','Backdoor','Keylogger','Botnet','PUA',
         'Packer','Crypter','UPX','Themida',
         'Suspicious','Heuristic','Indicator','C2','Exploit',
         'Policy','tc_policy','Test','Experimental','Global','Private',
         'APT28','Lazarus','MITRE_T1041','FileLess','Macro','Script'
-        )```
+        )``
