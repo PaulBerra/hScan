@@ -61,22 +61,22 @@ Getting help :
 
 Create the base of hash :
 ```
-.\main.ps1 build -Out BaseScan.csv
+.\main.ps1 build -Out .\BaseScan.csv
 ```
 
 Compare with hash base & generate report:
 ```
-.\main.ps1 scan -In .\BaseScan.csv -Report report.csv
+.\main.ps1 scan -In .\BaseScan.csv -Out .\diff.csv
 ```
 
 Run a yara analysis on new and modified files :
 ```
-.\main.ps1 scan -In .\BaseScan.csv -Report .\report.csv -YaraScan 
+.\main.ps1 scan -In .\BaseScan.csv -Out .\diff.csv -YaraScan 
 ```
 
 Compare with hash base & yara + virustotal analysis :
 ```
-.\main.ps1 scan -In .\BaseScan.csv -YaraScan -Vt
+.\main.ps1 scan -In .\BaseScan.csv -Out .\diff.csv -Vt
 ```
 
 
