@@ -57,7 +57,7 @@ For obvious reasons, the analysis typically focuses on files that are writable b
 
 ```
 # Do not use $env if you dont run the script from user env.
-Feature is coming soon.
+# Feature is coming soon.
 
 $env:USERPROFILE,
 $env:LOCALAPPDATA,
