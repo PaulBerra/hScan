@@ -56,13 +56,15 @@ Incoming :
 For obvious reasons, the analysis typically focuses on files that are writable by the user by default, like : 
 
 ```
+# Do not use $env if you dont run the script from user env.
+Feature is coming soon.
+
 $env:USERPROFILE,
 $env:LOCALAPPDATA,
 $env:APPDATA,
 $env:ProgramData,
 $env:TEMP
 ```
-! Do not use $env if you dont run the script from user env. will be added soon.
 
 The aim is to keep false positives to a minimum and optimize the analysis.
 
