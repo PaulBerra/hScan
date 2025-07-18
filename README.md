@@ -25,7 +25,7 @@ Before starting, you must fill in at least in the config :
 YaraBinaryPath = "yara64.exe"
 YaraRulesPath = "rules\"
 VirusTotalApiKey = ""  # if you want to use it
-
+```
 
 We also recommend choosing a repo of relevant yara rules and indexed patches (index.yar).
 
