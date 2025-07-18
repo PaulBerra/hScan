@@ -29,8 +29,8 @@ git clone https://github.com/Yara-Rules/rules.git
 
 Before starting, you must fill in at least in the config :
 ```
-YaraBinaryPath = "yara64.exe"
-YaraRulesPath = "rules\"
+YaraBinaryPath = "yara64.exe"    # Must be FullPath
+YaraRulesPath = "rules\"         # Must be FullPath
 VirusTotalApiKey = ""  # if you want to use it
 ```
 
