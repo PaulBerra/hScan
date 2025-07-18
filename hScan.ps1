@@ -29,10 +29,10 @@ param(
 if ($Vt) { $YaraScan = $true}
 
 # modules dot sourcing (not definitiv)
-. "$PSScriptRoot\lib\Utils.ps1"
-. "$PSScriptRoot\lib\Invoke\Functions\Invoke-Build.ps1"
-. "$PSScriptRoot\lib\Invoke\Actions\Action-Build.ps1"
-. "$PSScriptRoot\lib\Invoke\Functions\Invoke-Scan.ps1"
+. "lib\Functions\Utils.ps1"
+. "lib\Invoke\Invoke-Build.ps1"
+. "lib\Actions\Action-Build.ps1"    
+. "lib\Invoke\Invoke-Scan.ps1"      
 
 #load config in gVar
 $global:ConfigObject = LoadConfig -configPath ".\config.ps1"
@@ -41,13 +41,16 @@ $global:ConfigObject = LoadConfig -configPath ".\config.ps1"
 switch ($Action.ToLower()) {
     'build' {
         Show-hScanBannerAnimated
-        Write-Host "=> BUILD : Baseline generation in '$Out'"
+        Write-Host "=> BUILD : Baseline generation in '$Out'"  -NoNewline-ForegroundColor Green
+        Start-Sleep 2
+
         Invoke-Build -Out $Out -Config $ConfigObject
         break
     }
     'scan' {
         Show-hScanBannerAnimated
-        Write-Host "=> SCAN : Reading of '$In'"
+        Write-Host "=> SCAN : Reading of '$In'" -NoNewline -ForegroundColor Green
+        Start-Sleep 2
 
         if ($YaraScan -eq $true -and $Vt -eq $false) { 
             Write-Host "`r[+] YaraScan turned on                                      " -NoNewline -ForegroundColor Green # if yara, print yara turned on 

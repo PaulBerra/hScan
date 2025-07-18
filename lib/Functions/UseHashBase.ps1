@@ -1,7 +1,7 @@
 # sauvegarde la abse de hash en focntion de lextension
 # detecte extension
 
-. "$PSScriptRoot\..\..\..\lib\Utils.ps1" #import date converter
+. "lib\Functions\Utils.ps1" #import date converter
 
 function Save-HashBase {
     param(

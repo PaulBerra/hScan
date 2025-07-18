@@ -63,9 +63,9 @@ function Invoke-YaraScan {
                 }
             }
         } else {
-            Write-Warning "No files found or all files are locked by another program.. cant execute" -
+            Write-Warning "No files found or all files are locked by another program.. cant execute"
             Write-Warning "Yara Error (try looking at your index.yar): $yaraOutput"
-            #$result.Errors += "Error Yara (code $LASTEXITCODE) : $yaraOutput"
+            $result.Errors += "Error Yara (code $LASTEXITCODE) : $yaraOutput"
         }
        
     } catch {

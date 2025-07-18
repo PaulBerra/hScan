@@ -1,6 +1,6 @@
 
 
-. "$PSScriptRoot\..\..\..\lib\Invoke\Functions\UseHashBase.ps1"
+. "lib\Functions\UseHashBase.ps1"
 
 
 function CompareHashesRecursive {
