@@ -62,6 +62,7 @@ $env:APPDATA,
 $env:ProgramData,
 $env:TEMP
 ```
+! Do not use $env if you dont run the script from user env. will be added soon.
 
 The aim is to keep false positives to a minimum and optimize the analysis.
 
