@@ -36,30 +36,30 @@ function Invoke-VirusTotalScan {
             
             if ($result.Type -eq 'File') {
                 if (-not (Test-Path $item)) {
-                    $result.Errors += "Fichier introuvable : $item"
+                    $result.Errors += "File not found : $item"
                     $results += $result
                     continue
                 }
                 
                 # Upload file si demandé
                 if ($UploadFile) {
-                    Write-Host "Upload vers VT: $([System.IO.Path]::GetFileName($item))" -ForegroundColor Gray
+                    Write-Host "Upload to VT: $([System.IO.Path]::GetFileName($item))" -ForegroundColor Gray
                     $uploadResult = Invoke-VirusTotalUpload -FilePath $item -ApiKey $ApiKey
                     if ($uploadResult.Success) {
                         $result.Permalink = $uploadResult.Permalink
-                        Write-Host "Upload réussi, attente analyse..." -ForegroundColor Yellow
-                        Start-Sleep -Seconds 60  # Attendre l'analyse
+                        Write-Host "Upload successful, waiting for analysis..." -ForegroundColor Yellow
+                        Start-Sleep -Seconds 60  # wait analyse
                     }
                 }
                 
-                # Obtenir le hash du fichier pour lookup
+                # Get the file hash for lookup
                 $fileHash = (Get-FileHash -Path $item -Algorithm SHA256).Hash
                 $queryHash = $fileHash
             } else {
                 $queryHash = $item
             }
             
-            # Lookup du rapport
+            # Lookup of report
             Write-Host "VT Lookup: $queryHash" -ForegroundColor Gray
             $uri = "$baseUrl/file/report"
             $body = @{
@@ -73,13 +73,13 @@ function Invoke-VirusTotalScan {
             $result.ResponseCode = $response.response_code
             
             if ($response.response_code -eq 1) {
-                # Rapport trouvé
+                # Report found
                 $result.Positives = $response.positives
                 $result.Total = $response.total
                 $result.ScanDate = $response.scan_date
                 $result.Permalink = $response.permalink
                 
-                # Parser les détections
+                # Parsing detections
                 if ($response.scans) {
                     $response.scans.PSObject.Properties | ForEach-Object {
                         if ($_.Value.detected) {
@@ -93,7 +93,7 @@ function Invoke-VirusTotalScan {
                     }
                 }
                 
-                # Affichage résultat
+                # Result display
                 if ($result.Positives -gt 0) {
                     Write-Host "VT: $($result.Positives)/$($result.Total) détections" -ForegroundColor Red
                 } else {
@@ -133,7 +133,7 @@ function Invoke-VirusTotalUpload {
     try {
         $uri = "https://www.virustotal.com/vtapi/v2/file/scan"
         
-        # Préparer le multipart form
+        # Prepare the multipart form
         $boundary = [System.Guid]::NewGuid().ToString()
         $fileBytes = [System.IO.File]::ReadAllBytes($FilePath)
         $fileName = [System.IO.Path]::GetFileName($FilePath)

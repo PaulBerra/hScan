@@ -25,13 +25,13 @@ $($report.FileChanges | ForEach-Object { "[$($_.Status.ToUpper())] $($_.Path)" }
 
 DÉTECTIONS YARA:
 $($report.YaraDetections | ForEach-Object {
-    "🚨 $($_.TargetPath)`n  Règles: $($_.RuleMatches.Rule -join ', ')`n"
+    "$($_.TargetPath)`n  Règles: $($_.RuleMatches.Rule -join ', ')`n"
 } | Out-String)
 
 $(if ($report.VtDetections) {
 "DÉTECTIONS VIRUSTOTAL:
 $($report.VtDetections | ForEach-Object {
-    "🚨 $($_.Input) - $($_.Positives)/$($_.Total) détections`n  Permalink: $($_.Permalink)`n"
+    "$($_.Input) - $($_.Positives)/$($_.Total) détections`n  Permalink: $($_.Permalink)`n"
 } | Out-String)"
 })
 "@

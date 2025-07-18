@@ -98,4 +98,22 @@ Defines a list of file patterns to exclude from the scan.
 
 *   `DefaultExclusions`: An array of file patterns to exclude (e.g., "*.tmp", "*.cache").
 
+### Report Template
 
+Define the template of the report.
+
+*   `ReportsTemplate` = "detailed"
+
+### Yara rules match
+
+Defines the rules used in YaraScan (like the -t parameter of the binary)
+
+```
+*   `YaraMatchs` = @(
+        'Malware','Trojan','Ransomware','Spyware','Adware','Worm',
+        'Virus','Backdoor','Keylogger','Botnet','PUA',
+        'Packer','Crypter','UPX','Themida',
+        'Suspicious','Heuristic','Indicator','C2','Exploit',
+        'Policy','tc_policy','Test','Experimental','Global','Private',
+        'APT28','Lazarus','MITRE_T1041','FileLess','Macro','Script'
+        )```

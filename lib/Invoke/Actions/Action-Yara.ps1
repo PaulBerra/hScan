@@ -20,30 +20,31 @@ function Invoke-YaraScan {
    
     # Vérifications de base
     if (-not (Test-Path $YaraBinary)) {
-        $result.Errors += "Binaire Yara introuvable : $YaraBinary"
+        $result.Errors += "Binary Yara not found : $YaraBinary"
         return $result
     }
    
     $indexYar = Join-Path $RulesDirectory "index.yar"
     if (-not (Test-Path $indexYar)) {
-        $result.Errors += "Fichier index.yar introuvable : $indexYar"
+        $result.Errors += "Index.yar file not found : $indexYar"
         return $result
     }
    
     if (-not (Test-Path $TargetPath)) {
-        $result.Errors += "Fichier inaccessible : $TargetPath"
+        $result.Errors += "File inaccessible : $TargetPath"
         return $result
     }
    
     try {
         $arguments = @(
             '--no-warnings',
+            #'-s',     show matched strings (debug)
             $indexYar,
             $TargetPath
         )
        
         $yaraOutput = & $YaraBinary $arguments 2>&1
-       
+
         if ($LASTEXITCODE -eq 0) {
             $result.Success = $true
             
@@ -51,7 +52,7 @@ function Invoke-YaraScan {
                 $result.HasDetections = $true
                 $result.Detections = $yaraOutput
                 
-                # Parser les règles matchées
+                # Parse matching rules
                 $yaraOutput | ForEach-Object {
                     if ($_ -match '^(\w+)\s+(.+)$') {
                         $result.RuleMatches += [PSCustomObject]@{
@@ -62,7 +63,7 @@ function Invoke-YaraScan {
                 }
             }
         } else {
-            $result.Errors += "Erreur Yara (code $LASTEXITCODE) : $yaraOutput"
+            $result.Errors += "Error Yara (code $LASTEXITCODE) : $yaraOutput"
         }
        
     } catch {

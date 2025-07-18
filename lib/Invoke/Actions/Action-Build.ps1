@@ -1,7 +1,7 @@
 
 # return object of path/hash/lastmodified
 
-. "C:\dev\hScan\lib\Invoke\Functions\UseHashBase.ps1"
+. "$PSScriptRoot\..\..\..\lib\Invoke\Functions\UseHashBase.ps1"
 function GetFileHashesRecursive {
     param(
         [Parameter(Mandatory)]
@@ -11,7 +11,7 @@ function GetFileHashesRecursive {
     foreach ($path in $Config.DefaultPaths) {
         try {
             if (-not (Test-Path $path)) {
-                Write-Warning "Chemin invalide : $path"
+                Write-Warning "Invalid path : $path"
                 continue
             }
             Get-ChildItem -Path $path -File -Recurse | ForEach-Object {
@@ -19,8 +19,8 @@ function GetFileHashesRecursive {
                     $hashResult = Get-FileHash -Path $_.FullName -Algorithm $Config.HashAlgorithms.Default -ErrorAction Stop
                     $hash = $hashResult.Hash
                 } catch {
-                    Write-Verbose "Impossible de hasher '$($_.FullName)' : $($_.Exception.Message)"
-                    $hash = $null  # ou "ERROR" pour identifier les fichiers problématiques
+                    Write-Verbose "Impossible to hash '$($_.FullName)' : $($_.Exception.Message)"
+                    $hash = $null  # or “ERROR” to identify problem files
                 }
                 
                 $Results += [PSCustomObject]@{
@@ -30,7 +30,7 @@ function GetFileHashesRecursive {
                 }
             }
         } catch {
-            Write-Warning "Erreur d'accès au chemin $path : $($_.Exception.Message)"
+            Write-Warning "Path access error $path : $($_.Exception.Message)"
         }
     }
     return $Results

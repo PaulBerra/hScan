@@ -9,16 +9,16 @@ function Invoke-Build {
         [string]$Out
     )
 
-    Write-Host "Chemins à explorer : $($Config.DefaultPaths -join ', ')"
+    Write-Host "Paths to explore : $($Config.DefaultPaths -join ', ')"
 
     $results = GetFileHashesRecursive -Config $Config
 
     if (-not $results -or $results.Count -eq 0) {
-        Write-Warning "Aucun fichier trouvé."
+        Write-Warning "No files found."
         return
     }
 
     Save-HashBase -Results $results -OutPath $Out
 
-    Write-Host "Baseline générée avec $($results.Count) fichiers."
+    Write-Host "Hashbase generated with $($results.Count) files."
 }

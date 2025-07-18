@@ -38,7 +38,7 @@ function LoadConfig {
         $config = & $configPath
         return $config
     } else {
-        Write-Host "ERREUR: Fichier de configuration introuvable" -ForegroundColor Red
+        Write-Host "ERREUR: Can't access configuration file" -ForegroundColor Red
         exit 1
     }
 }
@@ -292,7 +292,7 @@ function ConvertTo-DateTime {
             $frenchCulture = [System.Globalization.CultureInfo]::new("fr-FR")
             return [DateTime]::Parse($DateString, $frenchCulture)
         } catch {
-            throw "Impossible de convertir la date : $DateString"
+            throw "Unable to convert datetime : $DateString"
         }
     }
 }
@@ -334,11 +334,9 @@ function BuildReport {
         [string]$ReportType = 'standard'
     )
 
-    
 
-   
     $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-    $templatesPath = Resolve-Path ("C:\dev\hScan\lib\Invoke\templates\report_csv_summary.ps1")   
+    $templatesPath = Resolve-Path ("$PSScriptRoot\..\lib\Invoke\templates\report_csv_summary.ps1")   
 
     # Construire le rapport de base
     $report = [PSCustomObject]@{
@@ -406,12 +404,12 @@ function BuildReport {
                     $template = . $templateFile $report
                     $template | Out-File -FilePath $summaryPath -Encoding UTF8 
                 } else {
-                    Write-Warning "Template introuvable : $templateFile"
-                    "Rapport simple - $($report.Metadata.GeneratedAt)" | Out-File -FilePath $summaryPath -Encoding UTF8
+                    Write-Warning "Can't find template : $templateFile"
+                    "Simple report - $($report.Metadata.GeneratedAt)" | Out-File -FilePath $summaryPath -Encoding UTF8
                 }
             
-                Write-Host "Rapport CSV: $OutputPath" -ForegroundColor Green
-                Write-Host "Résumé: $summaryPath" -ForegroundColor Green
+                Write-Host "CSV Report: $OutputPath" -ForegroundColor Green
+                Write-Host "Summary: $summaryPath" -ForegroundColor Green
             }
             '.xml' {
                 $report | Export-Clixml -Path $OutputPath
@@ -423,10 +421,10 @@ function BuildReport {
             }
         }
        
-        Write-Host "Rapport [$ReportType] sauvegardé: $OutputPath" -ForegroundColor Green
+        Write-Host "Report [$ReportType] saved: $OutputPath" -ForegroundColor Green
        
     } catch {
-        Write-Error "Erreur génération rapport: $($_.Exception.Message)"
+        Write-Error "Erreur building report: $($_.Exception.Message)"
         # Fallback - rapport simple
         $report | ConvertTo-Json -Depth 2 | Out-File -FilePath "$OutputPath.backup.json" -Encoding UTF8
     }

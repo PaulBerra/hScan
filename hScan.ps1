@@ -20,37 +20,37 @@ param(
     [Parameter(ParameterSetName='Scan')]
     [switch]$Vt,
 
+    # under developpment
     [Parameter(ParameterSetName='Scan')]
     [switch]$optimize = $false # default dont try to calcul entropy
 )
 
-
-
  # if -vt, we gonna need the report of yara & the optimisation, so yara = $true & optimize = $true
 if ($Vt) { $YaraScan = $true}
 
-
-Write-Verbose "Dot-sourcing modules"
+# modules dot sourcing (not definitiv)
 . "$PSScriptRoot\lib\Utils.ps1"
 . "$PSScriptRoot\lib\Invoke\Functions\Invoke-Build.ps1"
 . "$PSScriptRoot\lib\Invoke\Actions\Action-Build.ps1"
 . "$PSScriptRoot\lib\Invoke\Functions\Invoke-Scan.ps1"
 
-
+#load config in gVar
 $global:ConfigObject = LoadConfig -configPath ".\config.ps1"
 
+# toggle action
 switch ($Action.ToLower()) {
     'build' {
-        Write-Host "=> BUILD : generation de la baseline dans '$Out'"
+        #Show-hScanBannerAnimated
+        Write-Host "=> BUILD : Baseline generation in '$Out'"
         Invoke-Build -Out $Out -Config $ConfigObject
         break
     }
     'scan' {
-        Write-Host "→ SCAN : lecture de '$In'"
-        if ($YaraScan) { Write-Host " [+] YaraScan activé" }
-        if ($Vt)       { Write-Host " [+] VirusTotal activé (YaraScan auto-enabled)" }
-        #Invoke-Scan -In $In -YaraScan:$YaraScan -Vt:$Vt
-        Invoke-Scan -In $In -Config $ConfigObject -YaraScan $YaraScan
+        #Show-hScanBannerAnimated
+        Write-Host "→ SCAN : Reading of '$In'"
+        if ($YaraScan -eq $true -and $Vt -eq $false) { Write-Host " [+] YaraScan turned on" } # if yara, print yara turned on
+        if ($Vt -eq $true)       { Write-Host " [+] VirusTotal submission turned on(YaraScan auto-enabled)" } # if virustotal, print virustotal
+        Invoke-Scan -In $In -Out $Out -Config $ConfigObject -YaraScan $YaraScan -Vt $Vt -Report $ConfigObject.ReportsTemplate
         break
     }
     default { # wrong action switch

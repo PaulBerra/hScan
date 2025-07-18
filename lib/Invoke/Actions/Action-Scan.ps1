@@ -1,6 +1,6 @@
 
 
-. "C:\dev\hScan\lib\Invoke\Functions\UseHashBase.ps1"
+. "$PSScriptRoot\..\..\..\lib\Invoke\Functions\UseHashBase.ps1"
 
 
 function CompareHashesRecursive {
@@ -13,14 +13,14 @@ function CompareHashesRecursive {
     
     $Differences = @()
     
-    # Créer des hashtables pour les recherches rapides
+    # Create hashtables for quick searches
     $OldHashesHash = @{}
     $NewHashesHash = @{}
     
     $OldHashes | ForEach-Object { $OldHashesHash[$_.Path] = $_ }
     $NewHashes | ForEach-Object { $NewHashesHash[$_.Path] = $_ }
     
-    # 1. NOUVEAUX : dans Current mais pas dans Baseline
+    # 1. NEW: in Current but not in Baseline
     $NewHashes | ForEach-Object {
         if (-not $OldHashesHash.ContainsKey($_.Path)) {
             $Differences += [PSCustomObject]@{
@@ -33,7 +33,7 @@ function CompareHashesRecursive {
         }
     }
     
-    # 2. SUPPRIMÉS : dans Baseline mais pas dans Current
+    # 2. DELETED: in Baseline but not in Current
     $OldHashes | ForEach-Object {
         if (-not $NewHashesHash.ContainsKey($_.Path)) {
             $Differences += [PSCustomObject]@{
@@ -46,7 +46,7 @@ function CompareHashesRecursive {
         }
     }
     
-    # 3. MODIFIÉS : dans les deux MAIS hashs différents
+    # 3. CHANGED: in both BUT different hashes
     $NewHashes | ForEach-Object {
         if ($OldHashesHash.ContainsKey($_.Path)) {
             $oldFile = $OldHashesHash[$_.Path]
@@ -62,6 +62,6 @@ function CompareHashesRecursive {
         }
     }
     
-    Write-Host "Comparaison terminée : $($Differences.Count) différences trouvées"
+    Write-Host "Comparison completed : $($Differences.Count) differences found"
     return $Differences
 }

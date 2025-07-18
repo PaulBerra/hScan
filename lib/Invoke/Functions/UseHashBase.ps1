@@ -13,18 +13,18 @@ function Save-HashBase {
     )
 
     if ([string]::IsNullOrEmpty($OutPath)) {
-        throw "Le chemin de sortie est vide"
+        throw "No valid output path provided"
     }
 
     $extension = [IO.Path]::GetExtension($OutPath).ToLower()
 
-    Write-Host "Sauvegarde de la baseline au format $extension dans : $OutPath"
+    Write-Host "Saving baseline under $extension in : $OutPath"
 
     switch ($extension) {
         '.csv' { $Results | Export-Csv -Path $OutPath -NoTypeInformation -Encoding UTF8 }
         '.json' { $Results | ConvertTo-Json -Depth 3 | Out-File -FilePath $OutPath -Encoding UTF8 }
         '.xml' { $Results | Export-Clixml -Path $OutPath }
-        default { throw "Extension $extension non supportée" }
+        default { throw "Extension $extension currently not supported" }
     }
 }
 
@@ -35,11 +35,11 @@ function LoadHashBase {
     )
    
     if (-not (Test-Path $FilePath)) {
-        throw "Le fichier '$FilePath' n'existe pas"
+        throw "the file '$FilePath' doesnt exist"
     }
    
     $extension = [IO.Path]::GetExtension($FilePath).ToLower()
-    Write-Host "Chargement de la baseline depuis : $FilePath (format $extension)"
+    Write-Host "Loading hashbase : $FilePath (format $extension)"
    
     try {
         switch ($extension) {
@@ -63,14 +63,14 @@ function LoadHashBase {
                 $Results = Import-Clixml -Path $FilePath
             }
             default {
-                throw "Extension $extension non supportée. Formats supportés : .csv, .json, .xml"
+                throw "Extension $extension currently not supported. Supporteds formats : .csv, .json, .xml"
             }
         }
        
-        Write-Host "Baseline chargée : $($Results.Count) fichiers"
+        Write-Host "HashBase loaded : $($Results.Count) files"
         return $Results
        
     } catch {
-        throw "Erreur lors du chargement du fichier : $($_.Exception.Message)"
+        throw "Error loading hashbase : $($_.Exception.Message)"
     }
 }
