@@ -40,13 +40,13 @@ $global:ConfigObject = LoadConfig -configPath ".\config.ps1"
 # toggle action
 switch ($Action.ToLower()) {
     'build' {
-        #Show-hScanBannerAnimated
+        Show-hScanBannerAnimated
         Write-Host "=> BUILD : Baseline generation in '$Out'"
         Invoke-Build -Out $Out -Config $ConfigObject
         break
     }
     'scan' {
-        #Show-hScanBannerAnimated
+        Show-hScanBannerAnimated
         Write-Host "→ SCAN : Reading of '$In'"
         if ($YaraScan -eq $true -and $Vt -eq $false) { Write-Host " [+] YaraScan turned on" } # if yara, print yara turned on
         if ($Vt -eq $true)       { Write-Host " [+] VirusTotal submission turned on(YaraScan auto-enabled)" } # if virustotal, print virustotal
