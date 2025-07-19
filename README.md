@@ -24,6 +24,8 @@ rm -rf yara/
 You can use this set of rules to test it : 
 ```
 git clone https://github.com/Yara-Rules/rules.git
+vi rules/index.yar
+# remove this line causing errors : include "./webshells/WShell_THOR_Webshells.yar"
 ```
 
 
